@@ -48,17 +48,24 @@ import { debug } from 'svelte/internal';
             "source-layer": "country_boundaries",
             paint: {
                 "fill-color": [
-                    'interpolate',
-                    ['exponential', .2],
-                    ['number', ['feature-state', 'impact'], 0],
-                    0,
-                    'rgba(228, 226, 210, 0.4)',
-                    100,
-                    'rgba(196,215,183, 0.4)',
-                    1000,
-                    'rgba(152, 199, 143, 0.4)',
-                    10000,
-                    'rgba(61, 166, 63, 0.4)',
+                    "case",
+                    ["in", ["get", "worldview"], ["literal", ["all", "JP"]]],
+                    // for countries in JP worldview, style as such
+                    [
+                        'interpolate',
+                        ['exponential', .1],
+                        ['number', ['feature-state', 'impact'], 0],
+                        0,
+                        'rgba(228, 226, 210, 0.2)',
+                        100,
+                        'rgba(196,215,183, 0.3)',
+                        10000,
+                        'rgba(152, 199, 143, 0.4)',
+                        1000000,
+                        'rgba(61, 166, 63, 0.5)',
+                    ],
+                    // otherwise: fallback to transparent
+                    'rgba(256, 256, 256, 0.0)',
                 ]
             }
         });
@@ -76,6 +83,7 @@ import { debug } from 'svelte/internal';
 </script>
 
 <div bind:this={impacts} class="mapboxgl-ctrl control">
+    <div>Click one or more impacts to visualize:</div>
     <ul>
         {#each IMPACTS as impact}
             <Impact {impact} {map}></Impact>
