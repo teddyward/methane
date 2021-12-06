@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
     import Impacts from '$lib/controls/Impacts.svelte';
     import Title from '$lib/controls/Title.svelte';
+    import Popup from '$lib/Popup.svelte'
 
     let map;
 	
@@ -21,6 +22,7 @@
     <slot name="controls">
         <Title {map}></Title>
         <Impacts {map}></Impacts>
+        <Popup {map}></Popup>
     </slot>
 </div>
 
