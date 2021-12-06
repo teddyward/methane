@@ -22,10 +22,19 @@
             const countryValue = $impactData.find((impactDatum) => {
                 return impactDatum.Country == country && impactDatum.ResponseToCH4 == impact
             }).Value
-            map.setFeatureState(
-                {source: "composite", "sourceLayer": "country_boundaries", "id": countryFeature[0].id},
-                {impact: countryValue}
-            )
+            const featureKey = {
+                source: "composite",
+                "sourceLayer": "country_boundaries",
+                "id": countryFeature[0].id
+            }
+            const oldValue = map.getFeatureState(featureKey).impact || 0
+            let newValue = countryValue
+            if (isActive) {
+                newValue = countryValue + oldValue
+            } else {
+                newValue = oldValue - countryValue
+            }
+            map.setFeatureState(featureKey, {impact: newValue})
         })
     }
 </script>
