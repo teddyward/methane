@@ -1,6 +1,7 @@
 <script>
     export let impact = '';
     export let map = {};
+    import {impactData, countries} from '$lib/controls/impactStores'
 
 	let isActive = false;
     let displayName;
@@ -12,15 +13,20 @@
 
     function colorImpact() {
         isActive = !isActive;
-        const russia = map.querySourceFeatures('composite', {
-            'sourceLayer': "country_boundaries",
-            filter: ['in', ["get", "name_en"], ["literal", ["Russia"]]]
-        });
-        
-        map.setFeatureState(
-            {source: "composite", "sourceLayer": "country_boundaries", "id": russia[0].id},
-            {impact: .5}
-        )
+        $countries.forEach((country) => {
+            const countryFeature = map.querySourceFeatures('composite', {
+                'sourceLayer': "country_boundaries",
+                filter: ['in', ["get", "name_en"], ["literal", [country]]]
+            });
+            if (!countryFeature || !countryFeature.length) return
+            const countryValue = $impactData.find((impactDatum) => {
+                return impactDatum.Country == country && impactDatum.ResponseToCH4 == impact
+            }).Value
+            map.setFeatureState(
+                {source: "composite", "sourceLayer": "country_boundaries", "id": countryFeature[0].id},
+                {impact: countryValue}
+            )
+        })
     }
 </script>
 

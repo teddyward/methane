@@ -1,6 +1,9 @@
 <script>
 	import { onMount, tick } from 'svelte'
     import Impact from '$lib/controls/Impact.svelte';
+    import impactsData from '$lib/impacts.json'
+    import {impactData, countries} from '$lib/controls/impactStores'
+import { debug } from 'svelte/internal';
 	let impacts
 
 	export let map
@@ -37,6 +40,7 @@
 	export const control = new Impacts()
 
     function onStyleLoad() {
+        console.log(impactsData)
         map.addLayer({
             id: 'methane-impact',
             type: 'fill',
@@ -45,15 +49,15 @@
             paint: {
                 "fill-color": [
                     'interpolate',
-                    ['linear'],
+                    ['exponential', .2],
                     ['number', ['feature-state', 'impact'], 0],
                     0,
                     'rgba(228, 226, 210, 0.4)',
-                    0.2,
+                    100,
                     'rgba(196,215,183, 0.4)',
-                    0.4,
+                    1000,
                     'rgba(152, 199, 143, 0.4)',
-                    1,
+                    10000,
                     'rgba(61, 166, 63, 0.4)',
                 ]
             }
@@ -64,6 +68,10 @@
 		await tick()
         map.on('style.load', onStyleLoad)
 		map.addControl(control, position);
+        impactData.set(impactsData.impacts)
+        countries.set(Array.from(
+            new Set($impactData.map((impact) => impact.Country))
+        ))
 	})
 </script>
 
