@@ -28,6 +28,6 @@
 	})
 </script>
 
-<div bind:this={title}>
+<div bind:this={title} class="mapboxgl-ctrl control">
     Methane Impacts and Mitigations
 </div>

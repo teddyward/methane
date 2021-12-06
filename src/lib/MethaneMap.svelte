@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+    import Impacts from '$lib/controls/Impacts.svelte';
     import Title from '$lib/controls/Title.svelte';
 
     let map;
@@ -19,6 +20,7 @@
 <div id="map">
     <slot name="controls">
         <Title {map}></Title>
+        <Impacts {map}></Impacts>
     </slot>
 </div>
 
@@ -27,4 +29,10 @@
 		height: 100vh;
 		width: 100vw;
 	}
+    #map :global(.control) {
+        background-color: rgba(256, 256, 256, 0.7);
+        margin: 0;
+        padding: 5px;
+        z-index: 2;
+    }
 </style>
